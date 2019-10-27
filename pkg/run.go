@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"errors"
 	"fmt"
 	"log"
 
@@ -35,14 +36,14 @@ func Run(c *cli.Context) (err error) {
 		Insecure: c.BoolT("insecure"),
 		NonSSL:   c.BoolT("nonssl"),
 	}
-	log.Println("Start assessments...")
+	log.Println("Start ScanImage...")
 
 	err = nginx.ScanImage(imageName, dockerOption)
-	if err != nil {
+	if errors.Is(nginx.ErrNoConf, err) {
+		log.Println(err.Error())
+	} else if err != nil {
 		return err
 	}
-
-	// Store ignore checkpoint code
-	//output := os.Stdout
+	log.Println("Finish ScanImage...")
 	return nil
 }

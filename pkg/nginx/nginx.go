@@ -18,6 +18,7 @@ import (
 	deckodertypes "github.com/goodwithtech/deckoder/types"
 )
 
+var ErrNoConf = errors.New("no nginx.conf files")
 var accessLogPrefix = "access_log"
 
 func ScanImage(imageName string, option deckodertypes.DockerOption) (err error) {
@@ -40,7 +41,7 @@ func checkConfFile(files extractor.FileMap) error {
 		}
 	}
 	if !existFile {
-		return errors.New("no nginx.conf files")
+		return ErrNoConf
 	}
 	return nil
 }
